@@ -18,17 +18,17 @@ The `docker-compose.yml` file is configured to orchestrate multiple services: th
 * **Controller**: Handles incoming HTTP requests, interacts with the model, and returns a response.
 
 ## Key Components
-**Controllers**: Located in the `controller` package, these components handle HTTP requests and responses.
-**Services**: Defined in the `service` package, services contain business logic and interact with the repository layer.
-**Repositories**: Situated in the `repository` package, these interfaces extend `JpaRepository` or `CrudRepository` for data access operations.
-**Entities**: Located in the `model` or `entity` package, these classes are annotated with JPA annotations to represent tables in your database.
+* **Controllers**: Located in the `controller` package, these components handle HTTP requests and responses.
+* **Services**: Defined in the `service` package, services contain business logic and interact with the repository layer.
+* **Repositories**: Situated in the `repository` package, these interfaces extend `JpaRepository` or `CrudRepository` for data access operations.
+* **Entities**: Located in the `model` or `entity` package, these classes are annotated with JPA annotations to represent tables in your database.
 
 ## Database Configuration
 Spring Boot supports various relational and NoSQL databases. Configure your database connection in the `application.properties` or `application.yml` file within the `src/main/resources` directory:
 
 ```properties
-# Example MySQL Configuration
-spring.datasource.url=jdbc:mysql://localhost:5432/yourDatabase
+# Example postgresSQL Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/yourDatabase
 spring.datasource.username=yourUsername
 spring.datasource.password=yourPassword
 spring.datasource.driverClassName = org.postgresql.Driver
