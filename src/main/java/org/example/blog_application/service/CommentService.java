@@ -5,6 +5,7 @@ import org.example.blog_application.entity.Comment;
 import org.example.blog_application.entity.Post;
 import org.example.blog_application.entity.User;
 import org.example.blog_application.exception.ResouceNotFoundException;
+import org.example.blog_application.exception.WrongItemException;
 import org.example.blog_application.model.requests.CommentRequest;
 import org.example.blog_application.repo.CommentRepository;
 import org.example.blog_application.repo.PostRepository;
@@ -20,10 +21,10 @@ public class CommentService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public Comment createNewComment(UUID postID, UUID userID, CommentRequest commentRequest) {
+    public Comment createNewComment(UUID userID, CommentRequest commentRequest) {
         Comment newComment = new Comment();
-        User user = userRepository.getReferenceById(userID);
-        Post post = postRepository.getReferenceById(postID);
+        User user = userRepository.findById(userID).orElseThrow(() -> new ResouceNotFoundException("comment not found with id = " + userID));
+        Post post = postRepository.findById(commentRequest.getPostID()).orElseThrow(() -> new ResouceNotFoundException("comment not found with id = " + commentRequest.getPostID()));
         newComment.setUser(user);
         newComment.setPost(post);
         newComment.setContent(commentRequest.getContent());
@@ -36,7 +37,18 @@ public class CommentService {
         if (comment == null) {
             throw new ResouceNotFoundException("comment not found with id = " + commentID);
         }
+
+        Post post = postRepository.findById(commentRequest.getPostID()).orElseThrow(() -> new ResouceNotFoundException("comment not found with id = " + commentRequest.getPostID()));
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new WrongItemException("wrong post");
+        }
+        UUID userID = UUID.fromString("test");
+        if (!comment.getUser().getId().equals(userID)) {
+            throw new WrongItemException("wrong user");
+        }
+
         comment.setContent(commentRequest.getContent());
+
         return commentRepository.save(comment);
     }
 
@@ -45,6 +57,12 @@ public class CommentService {
         if (comment == null) {
             throw new ResouceNotFoundException("comment not found with id = " + commentID);
         }
+
+        UUID userID = UUID.fromString("test");
+        if (!comment.getUser().getId().equals(userID)) {
+            throw new WrongItemException("wrong user");
+        }
+
         commentRepository.deleteById(commentID);
     }
 }

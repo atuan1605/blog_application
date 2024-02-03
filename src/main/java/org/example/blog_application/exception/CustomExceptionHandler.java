@@ -21,8 +21,8 @@ public class CustomExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ItemExistException.class)
-    public ResponseEntity<?> handleItemExistException(ItemExistException e) {
+    @ExceptionHandler({ItemExistException.class, WrongItemException.class})
+    public ResponseEntity<?> handleItemExistException(Exception e) {
         return new ResponseEntity<>(
                 new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage()),
                 HttpStatus.BAD_REQUEST

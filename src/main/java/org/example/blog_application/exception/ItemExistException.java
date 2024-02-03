@@ -1,8 +1,6 @@
 package org.example.blog_application.exception;
 
-import org.apache.coyote.BadRequestException;
-
-public class ItemExistException extends BadRequestException {
+public class ItemExistException extends RuntimeException {
     public ItemExistException(String message) {
         super(message);
     }

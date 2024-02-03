@@ -1,12 +1,16 @@
 package org.example.blog_application.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.blog_application.model.enums.UserRole;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -38,5 +42,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @PrePersist
+    public void logNewPostAttempt() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 
+    @PreUpdate
+    public void logPostUpdateAttempt() {
+        this.updatedAt = new Date();
+    }
 }
